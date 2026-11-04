@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DNA 탐험대</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f0f4ff;
+      color: #24334b;
+    }
+    .container {
+      max-width: 650px;
+      margin: auto;
+    }
+    header {
+      background: linear-gradient(135deg,#173c68,#7650a8);
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+    header h1 { margin: 8px 0; }
+    .dna { font-size: 55px; }
+    nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    nav button {
+      flex: 1;
+      padding: 12px 5px;
+      border: 0;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    nav button.active {
+      background: #435fa8;
+      color: white;
+    }
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px #00000010;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+    .bases {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 8px;
+      text-align: center;
+      margin: 15px 0;
+    }
+    .base {
+      padding: 12px 4px;
+      border-radius: 10px;
+      font-size: 23px;
+      font-weight: bold;
+    }
+    .A { background:#fce7e7; color:#b42318; }
+    .T { background:#fef3c7; color:#92400e; }
+    .G { background:#dcfce7; color:#166534; }
+    .C { background:#dbeafe; color:#1d4ed8; }
+    button.option, .next {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button.option { width: 100%; margin: 5px 0; }
+    button.option:hover { background: #eef1ff; }
+    .next {
+      background: #435fa8;
+      color: white;
+      border: none;
+      margin-top: 12px;
+      width: 100%;
+    }
+    .big {
+      font-size: 55px;
+      text-align: center;
+      margin: 15px;
+      font-weight: bold;
+    }
+    .feedback {
+      text-align: center;
+      min-height: 30px;
+      margin-top: 12px;
+    }
+    footer {
+      text-align: center;
+      color: #777;
+      font-size: 12px;
+      padding: 15px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <header>
+    <div class="dna">🧬</div>
+    <h1>DNA 탐험대</h1>
+    <p>생명의 비밀을 찾아 떠나는 과학 여행!</p>
+  </header>
+
+  <nav>
+    <button class="active" onclick="showPage('learn',this)">
+      📖 DNA 알아보기
+    </button>
+    <button onclick="showPage('pair',this)">
+      🧩 짝 맞추기
+    </button>
+    <button onclick="showPage('quiz',this)">
+      📝 퀴즈
+    </button>
+  </nav>
+
+  <!-- DNA 알아보기 -->
+  <section id="learn" class="page active">
+
+    <div class="card">
+      <h2>1. DNA란 무엇일까?</h2>
+      <p>
+        DNA는 생물의 유전 정보를 저장하는 물질이야.
+        생물의 특징과 몸을 만드는 데 필요한 정보가 담겨 있어.
+      </p>
+      <div class="big">🧬</div>
+      <p style="text-align:center">
+        DNA는 이중 나선 구조를 가지고 있어.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>2. DNA의 네 가지 염기</h2>
+      <div class="bases">
+        <div class="base A">A<br><small>아데닌</small></div>
+        <div class="base T">T<br><small>티민</small></div>
+        <div class="base G">G<br><small>구아닌</small></div>
+        <div class="base C">C<br><small>사이토신</small></div>
+      </div>
+      <p>
+        A는 T와 짝을 이루고, G는 C와 짝을 이루어.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>3. DNA의 역할</h2>
+      <ul>
+        <li>유전 정보를 저장해.</li>
+        <li>부모의 유전 정보를 자녀에게 전달해.</li>
+        <li>단백질을 만드는 데 필요한 정보를 제공해.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- DNA 짝 맞추기 -->
+  <section id="pair" class="page">
+    <div class="card">
+      <h2>🧩 DNA 짝 맞추기</h2>
+      <p>주어진 염기와 짝이 되는 염기를 선택해 봐!</p>
+
+      <div class="big" id="given">A</div>
+      <p style="text-align:center">짝이 되는 염기는?</p>
+
+      <div class="bases">
+        <button class="base A" onclick="checkPair('A')">A</button>
+        <button class="base T" onclick="checkPair('T')">T</button>
+        <button class="base G" onclick="checkPair('G')">G</button>
+        <button class="base C" onclick="checkPair('C')">C</button>
+      </div>
+
+      <div class="feedback" id="pairFeedback">
+        정답을 선택해 봐!
+      </div>
+
+      <p>맞힌 개수: <b id="pairScore">0</b></p>
+      <button class="next" onclick="newPair()">다음 문제 →</button>
+    </div>
+
+    <div class="card">
+      <h3>기억하기!</h3>
+      <p>A ↔ T</p>
+      <p>G ↔ C</p>
+    </div>
+  </section>
+
+  <!-- 퀴즈 -->
+  <section id="quiz" class="page">
+    <div class="card">
+      <h2>📝 생명과학 퀴즈</h2>
+      <p id="progress">1 / 5</p>
+      <h3 id="question"></h3>
+      <div id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button id="nextQuiz" class="next"
+        onclick="nextQuestion()" style="display:none">
+        다음 문제 →
+      </button>
+      <div id="result" style="display:none;text-align:center">
+        <h2>🏆 탐험 완료!</h2>
+        <h3 id="score"></h3>
+        <button class="next" onclick="restartQuiz()">
+          다시 도전하기
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    DNA 탐험대 | 생명과학 학습용 웹앱
+  </footer>
+
+</div>
+
+<script>
+  // 메뉴 이동
+  function showPage(page, button) {
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+    });
+
+    document.getElementById(page).classList.add('active');
+
+    document.querySelectorAll('nav button').forEach(b => {
+      b.classList.remove('active');
+    });
+
+    button.classList.add('active');
+  }
+
+  // DNA 짝 맞추기
+  const pairs = {
+    A: 'T',
+    T: 'A',
+    G: 'C',
+    C: 'G'
+  };
+
+  const bases = ['A','T','G','C'];
+  let given = 'A';
+  let pairScore = 0;
+  let pairDone = false;
+
+  function newPair() {
+    given = bases[Math.floor(Math.random()*4)];
+
+    const element = document.getElementById('given');
+    element.textContent = given;
+    element.className = 'big ' + given;
+
+    document.getElementById('pairFeedback').textContent =
+      '정답을 선택해 봐!';
+
+    pairDone = false;
+  }
+
+  function checkPair(answer) {
+    if (pairDone) return;
+
+    if (pairs[given] === answer) {
+      pairScore++;
+      document.getElementById('pairScore').textContent = pairScore;
+      document.getElementById('pairFeedback').textContent =
+        '🎉 정답이야! 잘했어!';
+      pairDone = true;
+    } else {
+      document.getElementById('pairFeedback').textContent =
+        '아쉬워! 다시 생각해 봐.';
+    }
+  }
+
+  // 퀴즈 문제
+  const questions = [
+    {
+      q: 'DNA의 대표적인 구조는?',
+      options: ['단일 원형','이중 나선','삼각형','정육면체'],
+      answer: 1,
+      explain: 'DNA는 두 가닥이 꼬인 이중 나선 구조야.'
+    },
+    {
+      q: 'A와 짝을 이루는 염기는?',
+      options: ['G','C','T','A'],
+      answer: 2,
+      explain: 'A(아데닌)는 T(티민)와 짝을 이루어.'
+    },
+    {
+      q: 'G와 짝을 이루는 염기는?',
+      options: ['C','T','A','G'],
+      answer: 0,
+      explain: 'G(구아닌)는 C(사이토신)와 짝을 이루어.'
+    },
+    {
+      q: 'DNA가 저장하는 정보는?',
+      options: ['날씨 정보','유전 정보','교통 정보','음악 정보'],
+      answer: 1,
+      explain: 'DNA는 생물의 유전 정보를 저장해.'
+    },
+    {
+      q: 'DNA 연구가 활용되는 분야는?',
+      options: ['유전병 연구','자동차 운전','건물 청소','교통 신호'],
+      answer: 0,
+      explain: 'DNA 연구는 유전병의 원인과 치료법을 알아보는 데 도움을 줘.'
+    }
+  ];
+
+  let current = 0;
+  let quizScore = 0;
+  let answered = false;
+
+  function loadQuestion() {
+    const q = questions[current];
+
+    document.getElementById('progress').textContent =
+      (current+1) + ' / ' + questions.length;
+
+    document.getElementById('question').textContent = q.q;
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('nextQuiz').style.display = 'none';
+
+    const options = document.getElementById('options');
+    options.innerHTML = '';
+    answered = false;
+
+    q.options.forEach((option,index) => {
+      const button = document.createElement('button');
+
+      button.className = 'option';
+      button.textContent = (index+1) + '. ' + option;
+
+      button.onclick = function() {
+        checkAnswer(index);
+      };
+
+      options.appendChild(button);
+    });
+  }
+
+  function checkAnswer(index) {
+    if (answered) return;
+    answered = true;
+
+    const q = questions[current];
+    const buttons = document.querySelectorAll('#options button');
+
+    if (index === q.answer) {
+      quizScore++;
+      document.getElementById('feedback').textContent =
+        '✅ 정답! ' + q.explain;
+    } else {
+      document.getElementById('feedback').textContent =
+        '❌ 아쉬워! ' + q.explain;
+    }
+
+    buttons.forEach((button,i) => {
+      button.disabled = true;
+
+      if (i === q.answer) {
+        button.style.background = '#dcfce7';
+        button.style.borderColor = '#16a34a';
+      }
+    });
+
+    const next = document.getElementById('nextQuiz');
+    next.style.display = 'block';
+    next.textContent =
+      current === questions.length-1
+      ? '결과 확인하기'
+      : '다음 문제 →';
+  }
+
+  function nextQuestion() {
+    if (current < questions.length-1) {
+      current++;
+      loadQuestion();
+    } else {
+      document.getElementById('question').style.display = 'none';
+      document.getElementById('options').style.display = 'none';
+      document.getElementById('feedback').style.display = 'none';
+      document.getElementById('nextQuiz').style.display = 'none';
+
+      document.getElementById('result').style.display = 'block';
+
+      document.getElementById('score').textContent =
+        questions.length + '문제 중 ' + quizScore +
+        '문제를 맞혔어!';
+    }
+  }
+
+  function restartQuiz() {
+    current = 0;
+    quizScore = 0;
+
+    document.getElementById('question').style.display = 'block';
+    document.getElementById('options').style.display = 'block';
+    document.getElementById('feedback').style.display = 'block';
+    document.getElementById('result').style.display = 'none';
+
+    loadQuestion();
+  }
+
+  // 처음 실행
+  newPair();
+  loadQuestion();
+</script>
+
+</body>
+</html>
